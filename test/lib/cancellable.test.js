@@ -41,6 +41,22 @@ module.exports = {
               (e) => { assert.equal(e.message, message) }
             )
         },
+        'that will reject if `.cancel(...)` has already been called': () => {
+          let resolve
+          const message = 'we are canceling'
+
+          c.cancel(message)
+          const result = c(new Promise((r) => resolve = r))
+          resolve('already canceled, so this should have no effect')
+
+          return result
+            .then(
+              (v) => {
+                throw Error(`promise fulfilled unexpectedly with: "${v}"`)
+              },
+              (e) => { assert.equal(e.message, message) }
+            )
+        },
       },
     },
   },
